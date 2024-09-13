@@ -3,9 +3,9 @@ class ParkSpace < ApplicationRecord
   validates :longitude, presence: true
 
   belongs_to :user
-  has_many :vehicles, dependent: :destroy
   has_many :park_vehicles, dependent: :destroy
-
+  
+  has_many :vehicles, dependent: :destroy
   accepts_nested_attributes_for :vehicles, allow_destroy: true
 
    # Add geocoding functionality to ParkSpace model
