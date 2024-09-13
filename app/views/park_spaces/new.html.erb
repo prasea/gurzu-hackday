@@ -1,0 +1,36 @@
+<h1>New Park Space</h1>
+
+<%= form_with(model: @park_space, local: true) do |form| %>
+  <% if @park_space.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@park_space.errors.count, "error") %> prohibited this park space from being saved:</h4>
+      <ul>
+        <% @park_space.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control', required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :location, class: 'form-label' %>
+    <%= form.text_field :location, class: 'form-control', required: true %>
+  </div>
+
+  <h2>Vehicles</h2>
+  <div class="field_wrapper">
+    <%= form.fields_for :vehicles do |vehicle_form| %>
+      <%= render 'vehicle_fields', f: vehicle_form %>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit 'Create Park Space', class: 'btn btn-primary' %>
+    <%= link_to 'Back', park_spaces_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

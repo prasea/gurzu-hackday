@@ -1,0 +1,46 @@
+<%= form_with(model: [@park_space, @park_vehicle], local: true, class: "needs-validation", novalidate: true) do |form| %>
+  <% if @park_vehicle.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@park_vehicle.errors.count, "error") %> prohibited this park vehicle from being saved:</h4>
+      <ul>
+        <% @park_vehicle.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :vehicle_name, class: "form-label" %>
+    <%= form.select :vehicle_name, Vehicle.vehicle_names.keys.map { |k| [k.humanize, k] }, { include_blank: true }, class: "form-select park-vehicle-type", required: true %>
+    <div class="invalid-feedback">
+      Please select a vehicle type.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :vehicle_number, class: "form-label" %>
+    <%= form.text_field :vehicle_number, class: "form-control", required: true %>
+    <div class="invalid-feedback">
+      Please enter the vehicle number.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :status, "Parking Completed?", class: 'form-label' %>
+    <%= form.check_box :status, class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :starts_at, class: "form-label" %>
+    <%= form.datetime_local_field :starts_at, class: "form-control", required: true %>
+    <div class="invalid-feedback">
+      Please enter the start time.
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to 'Back', park_space_park_vehicles_path(@park_space), class: "btn btn-secondary" %>
+  </div>
+<% end %>

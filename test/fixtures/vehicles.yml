@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle: MyString
+  capacity: 1
+  hourly_rate: 1
+  status: false
+  park_space: one
+
+two:
+  vehicle: MyString
+  capacity: 1
+  hourly_rate: 1
+  status: false
+  park_space: two

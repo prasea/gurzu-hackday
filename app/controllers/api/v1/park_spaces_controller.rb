@@ -1,0 +1,70 @@
+# class Api::V1::ParkSpacesController < ApplicationController
+#   def park_space
+#     location = params[:location]
+#     if location.blank?
+#       render json: { error: "Location parameter is required" }, status: :bad_request
+#       return
+#     end
+
+#     # Geocode the location to get latitude and longitude
+#     results = Geocoder.search(location)
+
+#     if results.empty?
+#       render json: { error: "Geocoder not searching! Location not found" }, status: :not_found
+#       return
+#     end
+
+#     coordinates = results.first.coordinates # [latitude, longitude]
+#     latitude, longitude = coordinates
+
+#     # Find nearby park spaces
+#     park_spaces = ParkSpace.near([ latitude, longitude ], 10, units: :km).includes(:vehicles) # 10 km radius
+
+#     # Render the park spaces with associated vehicles
+#     # render json: park_spaces.as_json(include: { vehicles: { except: :id } }, except: :id)
+#     render json: park_spaces.to_json(include: :vehicles)
+#   end
+# end
+
+# app/controllers/api/v1/park_spaces_controller.rb
+class Api::V1::ParkSpacesController < ApplicationController
+  def park_space
+    location = params[:location]
+    if location.blank?
+      render json: { error: "Location parameter is required" }, status: :bad_request
+      return
+    end
+
+    # Geocode the location to get latitude and longitude
+    results = fetch_coordinates(location)
+    if results.empty?
+      render json: { error: "Location not found" }, status: :not_found
+      return
+    end
+
+    coordinates = results.first
+    latitude, longitude = coordinates
+    latitude, longitude = [ 27.6758786, 85.3854371 ] if coordinates.blank?
+
+    # Find nearby park spaces
+    park_spaces = ParkSpace.all.select do |park_space|
+      next if park_space.latitude.nil? || park_space.longitude.nil?
+
+      distance = Haversine.distance(latitude, longitude, park_space.latitude, park_space.longitude).to_km
+      distance <= 10 # 10 km radius
+    end.compact
+
+    render json: park_spaces.to_json(include: :vehicles)
+  end
+
+  private
+
+  def fetch_coordinates(location)
+    # Example static lookup
+    locations = {
+      "balkumari" => [ 27.671189199022322, 85.33709456556089 ]
+      # Add more locations here
+    }
+    [ locations[location] || [] ]
+  end
+end

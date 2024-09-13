@@ -1,0 +1,56 @@
+<div class="nested-fields">
+  <div class="card mb-3">
+    <div class="card-body">
+      <%= f.label :vehicle_name, class: 'form-label' %>
+      <%= f.select :vehicle_name, Vehicle.vehicle_names.keys.map { |v| [v.humanize, v] }, {}, class: 'form-select' %>
+
+      <%= f.label :capacity, class: 'form-label' %>
+      <%= f.number_field :capacity, class: 'form-control' %>
+
+      <%= f.label :hourly_rate, class: 'form-label' %>
+      <%= f.number_field :hourly_rate, class: 'form-control' %>
+
+      <%= f.label :status, class: 'form-label' %>
+      <%= f.check_box :status, class: 'form-check-input' %>
+
+      <%= f.hidden_field :_destroy %>
+      <%= link_to 'Remove', '#', class: 'btn btn-danger remove-fields' %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle dynamic field removal
+    document.body.addEventListener('click', function(event) {
+      if (event.target.classList.contains('remove-fields')) {
+        event.preventDefault();
+
+        // Find the parent element to remove
+        const nestedFields = event.target.closest('.nested-fields');
+
+        if (nestedFields) {
+          // Mark the hidden _destroy field as true
+          nestedFields.querySelector('input[type="hidden"]').value = '1';
+          // Hide the nested fields (you can also remove it from DOM if needed)
+          nestedFields.style.display = 'none';
+        }
+      }
+    });
+
+    // Handle dynamic field addition
+    document.querySelector('.add-fields-button').addEventListener('click', function(event) {
+      event.preventDefault();
+
+      const container = document.querySelector('.field-wrapper');
+      const newField = document.querySelector('#new-field-template').innerHTML;
+
+      // Create a new div for the new fields
+      const newDiv = document.createElement('div');
+      newDiv.classList.add('nested-fields');
+      newDiv.innerHTML = newField;
+
+      container.appendChild(newDiv);
+    });
+  });
+</script>
