@@ -9,8 +9,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :park_spaces
       get "park_spaces/:location", to: "park_spaces#park_space"
-      # resources :park_spaces
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
