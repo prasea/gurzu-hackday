@@ -1,4 +1,4 @@
-<h1>New Park Space</h1>
+<h1>Edit Park Space</h1>
 
 <%= form_with(model: @park_space, local: true) do |form| %>
   <% if @park_space.errors.any? %>
@@ -40,36 +40,8 @@
     <% end %>
   </div>
 
-  <%= link_to_add_fields "Add Vehicles", form, :vehicles%>
-
   <div class="mb-3">
-    <%= form.submit 'Create Park Space', class: 'btn btn-primary' %>
+    <%= form.submit 'Update Park Space', class: 'btn btn-primary' %>
     <%= link_to 'Back', park_spaces_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Attach event listener to the whole document
-    document.body.addEventListener('click', function(event) {
-      // Handle dynamic field addition
-      if (event.target && event.target.classList.contains('add_fields')) {
-        event.preventDefault();
-
-        console.log("Add vehicle clicked !!")
-
-        // Extract data attributes from the clicked element
-        const button = event.target;
-        const time = new Date().getTime();
-        const regexp = new RegExp(button.dataset.id, 'g');
-        const fields = button.dataset.fields.replace(regexp, time);
-
-        // Find the field wrapper and append the new fields
-        const fieldWrapper = document.querySelector('.field_wrapper');
-        if (fieldWrapper) {
-          fieldWrapper.insertAdjacentHTML('beforeend', fields);
-        }
-      }
-    });
-  });
-</script>
